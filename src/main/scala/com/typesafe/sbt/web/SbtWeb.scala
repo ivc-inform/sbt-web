@@ -271,9 +271,7 @@ object SbtWeb extends AutoPlugin {
         mappings in webModules := relativeMappings(webModules, webModuleDirectories).value,
         mappings in webModules := flattenDirectWebModules.value,
 
-        directWebModules ++= {
-            if (importDirectly.value) internalWebModules else Seq.empty
-        },
+        if (importDirectly.value) directWebModules ++= internalWebModules.value else directWebModules ++= Seq(),
 
         webJarsDirectory := webModuleDirectory.value / "webjars",
         webJars := generateWebJars(webJarsDirectory.value, webModulesLib.value, (webJarsCache in webJars).value, webJarsClassLoader.value),
