@@ -1,16 +1,16 @@
 package com.typesafe.sbt.web
 
-import com.typesafe.config.{ConfigException, ConfigFactory}
-import sbt._
-import sbt.Keys._
-import sbt.Defaults.relativeMappings
 import akka.actor.{ActorRefFactory, ActorSystem}
-import org.webjars.{FileSystemCache, WebJarExtractor}
-import org.webjars.WebJarAssetLocator.WEBJARS_PATH_PREFIX
-import com.typesafe.sbt.web.pipeline.Pipeline
+import com.typesafe.config.{ConfigException, ConfigFactory}
 import com.typesafe.sbt.web.incremental.{OpResult, OpSuccess}
-import sbt.internal.inc._
+import com.typesafe.sbt.web.pipeline.Pipeline
+import org.webjars.WebJarAssetLocator.WEBJARS_PATH_PREFIX
+import org.webjars.{FileSystemCache, WebJarExtractor}
+import sbt.Defaults.relativeMappings
+import sbt.Keys._
+import sbt._
 import sbt.internal.inc
+import sbt.internal.inc._
 
 object Import {
 
@@ -430,7 +430,7 @@ object SbtWeb extends AutoPlugin {
         withWebJarExtractor(target, cache, classLoader) {
             (e, to) =>
                 e.extractAllNodeModulesTo(to)
-        }.***.get
+        }.allPaths.get
     }
 
     private def generateWebJars(target: File, lib: String, cache: File, classLoader: ClassLoader): Seq[File] = {
@@ -438,7 +438,7 @@ object SbtWeb extends AutoPlugin {
             (e, to) =>
                 e.extractAllWebJarsTo(to)
         }
-        target.***.get
+        target.allPaths.get
     }
 
     // Mapping deduplication
