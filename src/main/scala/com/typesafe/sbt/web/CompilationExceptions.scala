@@ -1,5 +1,7 @@
 package com.typesafe.sbt.web
 
+import java.util.Optional
+
 import sbt._
 import xsbti.{CompileFailed, Position, Problem, Severity}
 import sbt.internal.inc.LoggedReporter
@@ -47,19 +49,19 @@ class GeneralProblem(val message: String, source: File) extends Problem {
   def severity(): Severity = Severity.Error
 
   def position(): Position = new Position {
-    def line(): Maybe[Integer] = Maybe.nothing()
+    def line(): Optional[Integer] = Optional.empty()
 
     def lineContent(): String = ""
 
-    def offset(): Maybe[Integer] = Maybe.nothing()
+    def offset(): Optional[Integer] = Optional.empty()
 
-    def pointer(): Maybe[Integer] = Maybe.nothing()
+    def pointer(): Optional[Integer] = Optional.empty()
 
-    def pointerSpace(): Maybe[String] = Maybe.nothing()
+    def pointerSpace(): Optional[String] = Optional.empty()
 
-    def sourcePath(): Maybe[String] = Maybe.just(source.getCanonicalPath)
+    def sourcePath(): Optional[String] = Optional.of(source.getCanonicalPath)
 
-    def sourceFile(): Maybe[File] = Maybe.just(source)
+    def sourceFile(): Optional[File] = Optional.of(source)
   }
 }
 
@@ -76,21 +78,21 @@ class LinePosition(
                     characterOffset: Int,
                     source: File
                     ) extends Position {
-  def line(): Maybe[Integer] = Maybe.just(lineNumber)
+  def line(): Optional[Integer] = Optional.of(lineNumber)
 
-  def offset(): Maybe[Integer] = Maybe.just(characterOffset)
+  def offset(): Optional[Integer] = Optional.of(characterOffset)
 
-  def pointer(): Maybe[Integer] = offset()
+  def pointer(): Optional[Integer] = offset()
 
-  def pointerSpace(): Maybe[String] = Maybe.just(
+  def pointerSpace(): Optional[String] = Optional.of(
     lineContent.take(pointer().get).map {
       case '\t' => '\t'
       case x => ' '
     })
 
-  def sourcePath(): Maybe[String] = Maybe.just(source.getPath)
+  def sourcePath(): Optional[String] = Optional.of(source.getPath)
 
-  def sourceFile(): Maybe[File] = Maybe.just(source)
+  def sourceFile(): Optional[File] = Optional.of(source)
 }
 
 /**
