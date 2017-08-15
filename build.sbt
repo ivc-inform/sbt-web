@@ -2,6 +2,8 @@ lazy val `sbt-web` = project in file(".")
 
 description := "sbt web support"
 
+scalaVersion := "2.12.3"
+
 libraryDependencies ++= Seq(
   "com.typesafe.akka" %% "akka-actor" % "2.5.4",
   "org.webjars" % "webjars-locator-core" % "0.32",

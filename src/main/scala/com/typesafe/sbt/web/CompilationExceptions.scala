@@ -1,8 +1,7 @@
 package com.typesafe.sbt.web
 
 import sbt._
-import xsbti.{Maybe, Position, Severity, Problem}
-import xsbti.CompileFailed
+import xsbti.{CompileFailed, Position, Problem, Severity}
 
 object CompileProblems {
 
