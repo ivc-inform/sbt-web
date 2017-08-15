@@ -1,5 +1,7 @@
 lazy val `sbt-web` = project in file(".")
 
+sbtPlugin := true
+
 organization := "com.typesafe.sbt"
 
 description := "sbt web support"
