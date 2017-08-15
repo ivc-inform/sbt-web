@@ -215,8 +215,8 @@ object SbtWeb extends AutoPlugin {
         compile in TestAssets := inc.Analysis.Empty,
         compile in TestAssets := (compile in TestAssets).dependsOn(compile in Assets).value,
 
-        test in TestAssets := (),
-        test in TestAssets := (test in TestAssets).dependsOn(compile in TestAssets),
+        test in TestAssets := inc.Analysis.Empty,
+        test in TestAssets := (test in TestAssets).dependsOn(compile in TestAssets).value,
 
         watchSources ++= (unmanagedSources in Assets).value,
         watchSources ++= (unmanagedSources in TestAssets).value,
