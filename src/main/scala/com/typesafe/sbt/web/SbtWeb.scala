@@ -11,6 +11,7 @@ import sbt.Keys._
 import sbt._
 import sbt.internal.inc
 import sbt.internal.inc._
+import sbt.internal.io.Source
 
 object Import {
 
@@ -148,6 +149,8 @@ object SbtWeb extends AutoPlugin {
         onUnload in Global := (onUnload in Global).value andThen unload
     )
 
+    implicit def fileSeq2SourceSec(files: Seq[File]): Seq[Source] = files.map(file ⇒ new Source(file, NothingFilter, NothingFilter))
+
     override def buildSettings: Seq[Def.Setting[_]] = Seq(
         nodeModuleDirectory in Plugin := (target in Plugin).value / "node-modules",
         webJarsCache in nodeModules in Plugin := (target in Plugin).value / "webjars-plugin.cache",
@@ -218,10 +221,10 @@ object SbtWeb extends AutoPlugin {
         test in TestAssets := inc.Analysis.Empty,
         test in TestAssets := (test in TestAssets).dependsOn(compile in TestAssets).value,
 
-        watchSources ++= (unmanagedSources in Assets).value,
-        watchSources ++= (unmanagedSources in TestAssets).value,
-        watchSources ++= (unmanagedResources in Assets).value,
-        watchSources ++= (unmanagedResources in TestAssets).value,
+        watchSources ++= fileSeq2SourceSec((unmanagedSources in Assets).value),
+        watchSources ++= fileSeq2SourceSec((unmanagedSources in TestAssets).value),
+        watchSources ++= fileSeq2SourceSec((unmanagedResources in Assets).value),
+        watchSources ++= fileSeq2SourceSec((unmanagedResources in TestAssets).value),
 
         pipelineStages := Seq.empty,
         allPipelineStages := Pipeline.chain(pipelineStages).value,
