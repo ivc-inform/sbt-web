@@ -2,6 +2,7 @@ package com.typesafe.sbt.web
 
 import sbt._
 import xsbti.{CompileFailed, Position, Problem, Severity}
+import sbt.internal.inc.LoggedReporter
 
 object CompileProblems {
 
@@ -12,9 +13,10 @@ object CompileProblems {
    * `CompileProblemsException` is thrown. The exception will contain
    * the list of problems.
    */
-  def report[Op,A](reporter: LoggerReporter, problems: Seq[Problem]): Unit = {
+  
+  def report[Op,A](reporter: LoggedReporter, problems: Seq[Problem]): Unit = {
     reporter.reset()
-    problems.foreach(p => reporter.log(p.position(), p.message(), p.severity()))
+    problems foreach reporter.log
     reporter.printSummary()
     if (problems.exists(_.severity() == Severity.Error)) { throw new CompileProblemsException(problems.toArray) }
   }

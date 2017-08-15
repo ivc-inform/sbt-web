@@ -9,6 +9,7 @@ import org.webjars.{FileSystemCache, WebJarExtractor}
 import org.webjars.WebJarAssetLocator.WEBJARS_PATH_PREFIX
 import com.typesafe.sbt.web.pipeline.Pipeline
 import com.typesafe.sbt.web.incremental.{OpResult, OpSuccess}
+import sbt.internal.inc.LoggedReporter
 
 object Import {
 
