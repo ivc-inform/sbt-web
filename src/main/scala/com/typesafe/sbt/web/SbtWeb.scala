@@ -25,7 +25,7 @@ object Import {
     val webTarget = SettingKey[File]("assets-target", "The target directory for assets")
 
     val jsFilter = SettingKey[FileFilter]("web-js-filter", "The file extension of js files.")
-    val reporter = TaskKey[LoggerReporter]("web-reporter", "The reporter to use for conveying processing results.")
+    val reporter = TaskKey[LoggedReporter]("web-reporter", "The reporter to use for conveying processing results.")
 
     val nodeModuleDirectory = SettingKey[File]("web-node-module-directory", "Default node modules directory, used for node based resources.")
     val nodeModuleDirectories = SettingKey[Seq[File]]("web-node-module-directories", "The list of directories that node modules are to expand into.")
@@ -157,7 +157,7 @@ object SbtWeb extends AutoPlugin {
   ) ++ inConfig(Plugin)(nodeModulesSettings)
 
   override def projectSettings: Seq[Setting[_]] = Seq(
-    reporter := new LoggerReporter(5, streams.value.log),
+    reporter := new LoggedReporter(5, streams.value.log),
 
     webTarget := target.value / "web",
 
