@@ -6,7 +6,7 @@ package com.typesafe.sbt.web.incremental
 import java.io.File
 import sbinary._
 import sbinary.Operations._
-import sbt.CacheIO
+import sbt.io.CopyOptions._
 import scala.collection.immutable.{ Map, Set }
 
 /**

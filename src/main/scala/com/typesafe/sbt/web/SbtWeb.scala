@@ -12,6 +12,8 @@ import sbt._
 import sbt.internal.inc
 import sbt.internal.inc._
 import sbt.internal.io.Source
+import sbt.util.CacheStore
+import scala.language.implicitConversions
 
 object Import {
 
@@ -246,7 +248,6 @@ object SbtWeb extends AutoPlugin {
       inConfig(TestAssets)(unscopedAssetSettings) ++ inConfig(TestAssets)(nodeModulesSettings) ++
       packageSettings
 
-
     val unscopedAssetSettings: Seq[Setting[_]] = Seq(
         includeFilter := GlobFilter("*"),
 
@@ -274,7 +275,7 @@ object SbtWeb extends AutoPlugin {
         mappings in webModules := relativeMappings(webModules, webModuleDirectories).value,
         mappings in webModules := flattenDirectWebModules.value,
 
-        if (importDirectly.value) directWebModules ++= internalWebModules.value else directWebModules ++= Seq(),
+        directWebModules ++= {if (importDirectly.value) internalWebModules.value else Seq()},
 
         webJarsDirectory := webModuleDirectory.value / "webjars",
         webJars := generateWebJars(webJarsDirectory.value, webModulesLib.value, (webJarsCache in webJars).value, webJarsClassLoader.value),
@@ -527,7 +528,7 @@ object SbtWeb extends AutoPlugin {
       * @return the target value
       */
     def syncMappings(cacheDir: File, cacheName: String, mappings: Seq[PathMapping], target: File): File = {
-        val cache = cacheDir / cacheName
+        val cache = CacheStore(cacheDir / cacheName)
         val copies: Seq[(File, File)] = mappings map {
             case (file, path) => file -> (target / path)
         }
@@ -600,7 +601,7 @@ object SbtWeb extends AutoPlugin {
     private def unload(state: State): State = {
         state.get(webActorSystemAttrKey).fold(state) {
             as =>
-                as.shutdown()
+                as.terminate()
                 state.remove(webActorSystemAttrKey)
         }
     }
