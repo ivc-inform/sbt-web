@@ -251,6 +251,7 @@ object SbtWeb extends AutoPlugin {
     val unscopedAssetSettings: Seq[Setting[_]] = Seq(
         includeFilter := GlobFilter("*"),
 
+        directWebModules ++=  Def.taskDyn {if (importDirectly.value) Def.task {internalWebModules.value} else Def.task {Seq.empty[String]}}.value,
         sourceGenerators := Nil,
         managedSourceDirectories := Nil,
         managedSources := sourceGenerators(_.join).map(_.flatten).value,
@@ -274,8 +275,6 @@ object SbtWeb extends AutoPlugin {
         webModules := webModuleGenerators(_.join).map(_.flatten).value,
         mappings in webModules := relativeMappings(webModules, webModuleDirectories).value,
         mappings in webModules := flattenDirectWebModules.value,
-
-        directWebModules ++= {if (importDirectly.value) internalWebModules.value else Seq()},
 
         webJarsDirectory := webModuleDirectory.value / "webjars",
         webJars := generateWebJars(webJarsDirectory.value, webModulesLib.value, (webJarsCache in webJars).value, webJarsClassLoader.value),
