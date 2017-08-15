@@ -163,6 +163,10 @@ object SbtWeb extends AutoPlugin {
     ) ++ inConfig(Plugin)(nodeModulesSettings)
 
     override def projectSettings: Seq[Setting[_]] = Seq(
+        sbtPlugin := true,
+        scalacOptions ++= Seq("-deprecation", "-feature", "-Xfatal-warnings"),
+
+        organization := "com.typesafe.sbt",
         reporter := new LoggedReporter(5, streams.value.log),
 
         webTarget := target.value / "web",
