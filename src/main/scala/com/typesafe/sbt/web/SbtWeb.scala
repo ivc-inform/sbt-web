@@ -272,7 +272,7 @@ object SbtWeb extends AutoPlugin {
         mappings in webModules := flattenDirectWebModules.value,
 
         directWebModules ++= {
-            if (importDirectly.value) internalWebModules.value else Seq.empty
+            if (importDirectly.value) internalWebModules else Seq.empty
         },
 
         webJarsDirectory := webModuleDirectory.value / "webjars",
@@ -393,7 +393,7 @@ object SbtWeb extends AutoPlugin {
         val moduleMappings = (mappings in webModules).value
         if (directModules.nonEmpty) {
             val prefixes = directModules map {
-                module => path(s"${webModulesLib.value}/${module}/")
+                module => path(s"${webModulesLib}/${module}/")
             }
             moduleMappings map {
                 case (file, path) => file -> stripPrefixes(path, prefixes)
