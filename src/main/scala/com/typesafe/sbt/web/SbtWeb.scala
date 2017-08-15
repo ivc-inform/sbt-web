@@ -528,7 +528,7 @@ object SbtWeb extends AutoPlugin {
       */
     def syncMappings(cacheDir: File, cacheName: String, mappings: Seq[PathMapping], target: File): File = {
         val cache = cacheDir / cacheName
-        val copies = mappings map {
+        val copies: Seq[(File, File)] = mappings map {
             case (file, path) => file -> (target / path)
         }
         Sync(cache)(copies)
