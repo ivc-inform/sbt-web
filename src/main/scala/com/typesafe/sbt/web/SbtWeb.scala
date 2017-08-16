@@ -166,6 +166,8 @@ object SbtWeb extends AutoPlugin {
         sbtPlugin := true,
         scalacOptions ++= Seq("-deprecation", "-feature", "-Xfatal-warnings"),
 
+        publishMavenStyle := true,
+
         organization := "com.typesafe.sbt",
         reporter := new LoggedReporter(5, streams.value.log),
 
