@@ -151,7 +151,7 @@ object SbtWeb extends AutoPlugin {
         onUnload in Global := (onUnload in Global).value andThen unload
     )
 
-    implicit def fileSeq2SourceSec(files: Seq[File]): Seq[Source] = files.map(file ⇒ new Source(file, NothingFilter, NothingFilter))
+    def fileSeq2SourceSec(files: Seq[File]): Seq[Source] = files.map(file ⇒ new Source(file, NothingFilter, NothingFilter))
 
     override def buildSettings: Seq[Def.Setting[_]] = Seq(
         nodeModuleDirectory in Plugin := (target in Plugin).value / "node-modules",
